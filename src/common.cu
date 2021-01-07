@@ -753,6 +753,10 @@ testResult_t run() {
   }
 #ifdef MPI_SUPPORT
   MPI_Bcast(&ncclId, sizeof(ncclId), MPI_BYTE, 0, MPI_COMM_WORLD);
+#else
+  else {
+    TESTCHECK(getUniqueIdFromEnv(&ncclId));
+  }
 #endif
   cudaStream_t streams[nGpus*nThreads];
   void* sendbuffs[nGpus*nThreads];

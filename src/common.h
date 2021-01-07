@@ -201,6 +201,16 @@ static size_t wordSize(ncclDataType_t type) {
   }
 }
 
+static testResult_t getUniqueIdFromEnv(ncclUniqueId* id) {
+  char* env = getenv("NCCL_COMM_ID");
+  if (env) {
+    NCCLCHECK(ncclGetUniqueId(id));
+    return testSuccess;
+  }
+  printf("NCCL_COMM_ID must be set to run without MPI support\n");
+  return testInternalError;
+}
+
 extern ncclDataType_t test_types[ncclNumTypes];
 extern const char *test_typenames[ncclNumTypes];
 extern ncclRedOp_t test_ops[ncclNumOps];

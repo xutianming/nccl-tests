@@ -205,10 +205,18 @@ static testResult_t getUniqueIdFromEnv(ncclUniqueId* id) {
   char* env = getenv("NCCL_COMM_ID");
   if (env) {
     NCCLCHECK(ncclGetUniqueId(id));
-    return testSuccess;
   }
-  printf("NCCL_COMM_ID must be set to run without MPI support\n");
-  return testInternalError;
+  return testSuccess;
+}
+
+static testResult_t getRankSizeFromEnv(int* worker_size, int* worker_rank) {
+  char* worker_size_env = getenv("NCCL_WORKER_SIZE");
+  char* worker_rank_env = getenv("NCCL_WORKER_RANK");
+  if (worker_size_env && worker_rank_env) {
+    *worker_size = atoi(worker_size_env);
+    *worker_rank = atoi(worker_rank_env);
+  }
+  return testSuccess;  
 }
 
 extern ncclDataType_t test_types[ncclNumTypes];

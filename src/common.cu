@@ -712,6 +712,8 @@ testResult_t run() {
     if (p == proc) break;
     if (hostHashs[p] == hostHashs[proc]) localRank++;
   }
+#else
+  TESTCHECK(getRankSizeFromEnv(&nProcs, &proc));
 #endif
   is_main_thread = (proc == 0) ? 1 : 0;
 

@@ -68,10 +68,11 @@ testResult_t AlltoAllRunColl(void* sendbuff, void* recvbuff, size_t count, ncclD
   printf("NCCL 2.7 or later is needed for alltoall. This test was compiled with %d.%d.\n", NCCL_MAJOR, NCCL_MINOR);
   return testNcclError;
 #else
+  size_t counts[nRanks] = {11751424, 5328896, 3428352, 2936832, 3297280, 3231744, 3035136, 3559424, 4640768, 2445312, 3428352, 4214784, 3624960, 4210688, 4505600, 22937600};
   NCCLCHECK(ncclGroupStart());
   for (int r=0; r<nRanks; r++) {
-    NCCLCHECK(ncclSend(((char*)sendbuff)+r*rankOffset, count, type, r, comm, stream));
-    NCCLCHECK(ncclRecv(((char*)recvbuff)+r*rankOffset, count, type, r, comm, stream));
+    NCCLCHECK(ncclSend(((char*)sendbuff)+r*rankOffset, counts[r], type, r, comm, stream));
+    NCCLCHECK(ncclRecv(((char*)recvbuff)+r*rankOffset, counts[root], type, r, comm, stream));
   }
   NCCLCHECK(ncclGroupEnd());
   return testSuccess;
